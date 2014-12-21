@@ -11,8 +11,8 @@ object PhilosopherWorksheet {
   
   val system = ActorSystem("philosophers")        //> system  : akka.actor.ActorSystem = akka://philosophers
   val p = system.actorOf(Props[Philosopher], "aristoteles")
-                                                  //> p  : akka.actor.ActorRef = Actor[akka://philosophers/user/aristoteles#-17259
-                                                  //| 62413]
+                                                  //> p  : akka.actor.ActorRef = Actor[akka://philosophers/user/aristoteles#-63100
+                                                  //| 9259]
 
  	p ! Philosopher.Speak
 
@@ -22,7 +22,5 @@ object PhilosopherWorksheet {
 // 	p ! Philosopher.Eat
  	p ! Philosopher.Speak
 
- 	p ! Philosopher.Bye
-
-	println("finished")                       //> finished|
+	println("finished")                       //> finished/
 }
