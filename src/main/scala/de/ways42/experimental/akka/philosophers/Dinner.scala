@@ -12,16 +12,11 @@ object Dinner {
   val system = ActorSystem("dinner")
 
   def main(args: Array[String]) {
-    val p1 = system.actorOf(Props[Philosopher], "aristoteles")
+    val chopsticks = for ( i <- 1 to 5 ) yield system.actorOf(Props(classOf[Chopstick], s"c$i"), s"chopstick-$i")
+    val philosophers = for ( (name, i) <- List("aristoteles", "plato", "decartes", "kant", "nitzsche").zipWithIndex ) yield system.actorOf(Props(classOf[Philosopher], name, chopsticks(i), chopsticks((i + 1) % 5)), name)
 
-    p1 ! Speak
-    p1 ! Eat
+    philosophers foreach { _ ! Think }
 
-    system.scheduler.scheduleOnce(2.seconds)(p1 ! Speak)
-    system.scheduler.scheduleOnce(4.seconds)(p1 ! Speak)
-    system.scheduler.scheduleOnce(6.seconds)(p1 ! Speak)
-    system.scheduler.scheduleOnce(8.seconds)(p1 ! Speak)
-    
     system.scheduler.scheduleOnce(10.seconds)(system.shutdown())
   }
 

@@ -10,17 +10,14 @@ object PhilosopherWorksheet {
   println("Welcome to the Scala worksheet")       //> Welcome to the Scala worksheet
   
   val system = ActorSystem("philosophers")        //> system  : akka.actor.ActorSystem = akka://philosophers
-  val p = system.actorOf(Props[Philosopher], "aristoteles")
-                                                  //> p  : akka.actor.ActorRef = Actor[akka://philosophers/user/aristoteles#-63100
-                                                  //| 9259]
+  val p = system.actorOf(Props(classOf[Philosopher], "aristoteles"), "aristoteles")
+                                                  //> p  : akka.actor.ActorRef = Actor[akka://philosophers/user/aristoteles#-91535
+                                                  //| 0416]
 
- 	p ! Philosopher.Speak
 
 	println("created actor")                  //> created actor
 
- 	p ! Philosopher.Speak
-// 	p ! Philosopher.Eat
- 	p ! Philosopher.Speak
+ 	p ! Philosopher.Think
 
 	println("finished")                       //> finished/
 }
