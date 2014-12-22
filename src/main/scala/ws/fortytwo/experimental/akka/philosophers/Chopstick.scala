@@ -1,4 +1,4 @@
-package de.ways42.experimental.akka.philosophers
+package ws.fortytwo.experimental.akka.philosophers
 
 import akka.actor.Actor
 import akka.actor.ActorLogging

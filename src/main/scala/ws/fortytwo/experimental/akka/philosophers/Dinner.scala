@@ -1,4 +1,4 @@
-package de.ways42.experimental.akka.philosophers
+package ws.fortytwo.experimental.akka.philosophers
 
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global

@@ -1,4 +1,4 @@
-package de.ways42.experimental.akka.philosophers
+package ws.fortytwo.experimental.akka.philosophers
 
 import scala.concurrent.duration._
 import akka.actor._
@@ -13,7 +13,7 @@ object Philosopher {
 
 class Philosopher(val name: String, val leftChopstick: ActorRef, val rightChopstick: ActorRef) extends Actor with ActorLogging {
   import Philosopher._
-  import Chopstick._
+import Chopstick._
 
   override def toString = name
 
