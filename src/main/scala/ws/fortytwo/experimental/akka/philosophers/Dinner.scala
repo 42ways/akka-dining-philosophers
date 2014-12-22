@@ -12,8 +12,8 @@ object Dinner {
   val system = ActorSystem("dinner")
 
   def main(args: Array[String]) {
-    val chopsticks = for ( i <- 1 to 5 ) yield system.actorOf(Props(classOf[Chopstick], s"c$i"), s"chopstick-$i")
-    val philosophers = for ( (name, i) <- List("aristoteles", "plato", "decartes", "kant", "nitzsche").zipWithIndex ) yield system.actorOf(Props(classOf[Philosopher], name, chopsticks(i), chopsticks((i + 1) % 5)), name)
+    val chopsticks = for ( i <- 1 to 5 ) yield system.actorOf(Props[Chopstick], s"c$i")
+    val philosophers = for ( (name, i) <- List("aristoteles", "plato", "decartes", "kant", "nitzsche").zipWithIndex ) yield system.actorOf(Props(classOf[Philosopher], chopsticks(i), chopsticks((i + 1) % 5)), name)
 
     philosophers foreach { _ ! Think }
 

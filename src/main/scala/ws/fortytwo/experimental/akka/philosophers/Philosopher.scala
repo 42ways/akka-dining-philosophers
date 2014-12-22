@@ -11,11 +11,11 @@ object Philosopher {
   case class ChopstickTaken(chopstick: ActorRef)
 }
 
-class Philosopher(val name: String, val leftChopstick: ActorRef, val rightChopstick: ActorRef) extends Actor with ActorLogging {
+class Philosopher(val leftChopstick: ActorRef, val rightChopstick: ActorRef) extends Actor with ActorLogging {
   import Philosopher._
 import Chopstick._
 
-  override def toString = name
+  def name = self.path.name
 
   implicit val executionContext = context.dispatcher
 
@@ -40,7 +40,7 @@ import Chopstick._
   }
 
   private def handleMissingChopstick(chopstick: ActorRef) = {
-    log info (s"Philosopher $name got a ChopstickInUse from $chopstick")
+    log debug ("Philosopher %s got a ChopstickInUse from %s".format(name, chopstick.path.name))
     thinkFor(retryTime)
   }
 
@@ -48,7 +48,7 @@ import Chopstick._
     case ChopstickInUse =>
       handleMissingChopstick(sender)
     case ChopstickTaken(chopstick) =>
-      log info (s"Philosopher $name took $chopstick, waiting for the other one")
+      log debug ("Philosopher %s took %s, waiting for the other one".format(name, chopstick.path.name))
       context.become(waitingForOtherChopstick)
   }
 
@@ -56,27 +56,29 @@ import Chopstick._
     case ChopstickInUse =>
       handleMissingChopstick(sender)
     case ChopstickTaken(chopstick) =>
-      log info (s"Philosopher $name took $chopstick and can now eat!")
+      log debug ("Philosopher %s took %s and can now eat!".format(name, chopstick.path.name))
+      log info ("Philosopher %s starts to eat with %s and %s".format(name, leftChopstick.path.name, rightChopstick.path.name))
       context.become(eating)
       context.system.scheduler.scheduleOnce(eatingTime, self, Think)
   }
 
   def thinking: Receive = {
     case Eat =>
-      log info (s"Philosopher $name wants to eat and becomes hungry")
+      log debug ("Philosopher %s wants to eat and becomes hungry".format(name))
       context.become(hungry)
       takeChopsticks
   }
 
   def eating: Receive = {
     case Think =>
-      log info (s"Philosopher $name is full and wants to think again")
+      log debug ("Philosopher %s is full and starts thinking again".format(name))
+      log info ("Philosopher %s puts down %s and %s and starts to think".format(name, leftChopstick.path.name, rightChopstick.path.name))
       thinkFor(thinkingTime)
   }
 
   def receive: Receive = {
     case Think =>
-      log info (s"Philosopher $name starts thinking")
+      log info ("Philosopher %s starts to think".format(name))
       thinkFor(thinkingTime)
   }
 

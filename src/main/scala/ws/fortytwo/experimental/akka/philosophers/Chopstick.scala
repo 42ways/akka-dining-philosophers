@@ -10,26 +10,26 @@ object Chopstick {
   case object Put
 }
 
-class Chopstick (val name: String) extends Actor with ActorLogging {
+class Chopstick extends Actor with ActorLogging {
   import Chopstick._
   import Philosopher._
 
-  override def toString = name
+  def name = self.path.name
 
   def available: Receive = {
     case Take =>
-      log info (s"Chopstick $name is taken by Philosopher $sender")
+      log debug ("Chopstick %s is taken by Philosopher %s".format(name, sender.path.name))
       context.become(taken(sender))
       sender ! ChopstickTaken(self)
   }
 
   def taken(philosopher: ActorRef): Receive = {
     case Take =>
-      log info (s"Chopstick $name cannot be taken by Philosopher $sender because it is in use by $philosopher")
+      log debug ("Chopstick %s cannot be taken by Philosopher %s because it is in use by %s".format(name, sender.path.name, philosopher.path.name))
       sender ! ChopstickInUse
     case Put =>
       if (sender == philosopher) {
-        log info (s"Chopstick $name is put by Philosopher $sender")
+        log debug ("Chopstick %s is put by Philosopher %s".format(name, sender.path.name))
         context.become(available)
       }
   }
