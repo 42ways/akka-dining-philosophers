@@ -3,6 +3,7 @@ package ws.fortytwo.experimental.akka.philosophers
 import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.ActorRef
+import akka.actor.actorRef2Scala
 
 object Chopstick {
   // Messages for Chopstick and client of Chopstick

@@ -1,7 +1,11 @@
 package ws.fortytwo.experimental.akka.philosophers
 
-import scala.concurrent.duration._
-import akka.actor._
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.duration.FiniteDuration
+import akka.actor.Actor
+import akka.actor.ActorLogging
+import akka.actor.ActorRef
+import akka.actor.actorRef2Scala
 
 object Philosopher {
   // Messages for Philosopher
@@ -11,7 +15,7 @@ object Philosopher {
 
 class Philosopher(val leftChopstick: ActorRef, val rightChopstick: ActorRef) extends Actor with ActorLogging {
   import Philosopher._
-import Chopstick._
+  import Chopstick._
 
   def name = self.path.name
 
