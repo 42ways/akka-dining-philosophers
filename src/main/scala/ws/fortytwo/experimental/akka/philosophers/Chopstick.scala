@@ -5,9 +5,11 @@ import akka.actor.ActorLogging
 import akka.actor.ActorRef
 
 object Chopstick {
-  // Messages for Chopstick
+  // Messages for Chopstick and client of Chopstick
   case object Take
   case object Put
+  case object ChopstickInUse
+  case object ChopstickTaken
 }
 
 class Chopstick extends Actor with ActorLogging {
@@ -20,7 +22,7 @@ class Chopstick extends Actor with ActorLogging {
     case Take =>
       log debug ("Chopstick %s is taken by Philosopher %s".format(name, sender.path.name))
       context.become(taken(sender))
-      sender ! ChopstickTaken(self)
+      sender ! ChopstickTaken
   }
 
   def taken(philosopher: ActorRef): Receive = {
