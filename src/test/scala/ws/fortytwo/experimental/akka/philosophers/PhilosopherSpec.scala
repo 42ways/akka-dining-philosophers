@@ -14,8 +14,6 @@ class PhilosopherSpec extends TestKit(ActorSystem("ChopstickSpec")) with Implici
     "try to take chopsticks after thinking for a while" in {
       val p = TestActorRef(Props(classOf[Philosopher], testActor, testActor))
       p ! Think
-      expectMsg(Chopstick.Put)
-      expectMsg(Chopstick.Put)
       expectMsg(5.seconds, Chopstick.Take)
       expectMsg(Chopstick.Take)
     }
