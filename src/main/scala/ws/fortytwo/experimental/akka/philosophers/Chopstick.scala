@@ -30,11 +30,9 @@ class Chopstick extends Actor with ActorLogging {
     case Take =>
       log debug ("Chopstick %s cannot be taken by Philosopher %s because it is in use by %s".format(name, sender.path.name, philosopher.path.name))
       sender ! ChopstickInUse
-    case Put =>
-      if (sender == philosopher) {
-        log debug ("Chopstick %s is put by Philosopher %s".format(name, sender.path.name))
-        context.become(available)
-      }
+    case Put if sender == philosopher =>
+      log debug ("Chopstick %s is put by Philosopher %s".format(name, sender.path.name))
+      context.become(available)
   }
 
   def receive = available
