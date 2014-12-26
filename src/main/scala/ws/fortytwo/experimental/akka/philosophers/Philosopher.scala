@@ -36,8 +36,8 @@ class Philosopher(val leftChopstick: ActorRef, val rightChopstick: ActorRef) ext
   }
 
   private def thinkFor(duration: FiniteDuration) = {
-    context.become(thinking)
     context.system.scheduler.scheduleOnce(duration, self, Eat)
+    context.become(thinking)
   }
 
   private def handleMissingChopstick(chopstick: ActorRef) = {
@@ -60,15 +60,15 @@ class Philosopher(val leftChopstick: ActorRef, val rightChopstick: ActorRef) ext
     case ChopstickTaken =>
       log debug ("Philosopher %s took %s and can now eat!".format(name, sender.path.name))
       log info ("Philosopher %s STARTS TO EAT with %s and %s".format(name, leftChopstick.path.name, rightChopstick.path.name))
-      context.become(eating)
       context.system.scheduler.scheduleOnce(eatingTime, self, Think)
+      context.become(eating)
   }
 
   def thinking: Receive = {
     case Eat =>
       log debug ("Philosopher %s wants to eat and becomes hungry".format(name))
-      context.become(hungry)
       takeChopsticks
+      context.become(hungry)
   }
 
   def eating: Receive = {
