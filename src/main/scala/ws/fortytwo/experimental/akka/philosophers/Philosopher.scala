@@ -13,17 +13,17 @@ object Philosopher {
   case object Think
 }
 
-class Philosopher(val leftChopstick: ActorRef, val rightChopstick: ActorRef) extends Actor with ActorLogging {
+class Philosopher(private val leftChopstick: ActorRef, private val rightChopstick: ActorRef) extends Actor with ActorLogging {
   import Philosopher._
   import Chopstick._
 
   def name = self.path.name
 
-  implicit val executionContext = context.dispatcher
+  implicit private val executionContext = context.dispatcher
 
-  val eatingTime = 1500.millis
-  val thinkingTime = 3500.millis
-  val retryTime = 10.millis
+  private val eatingTime = 1500.millis
+  private val thinkingTime = 3500.millis
+  private val retryTime = 10.millis
 
   private def takeChopsticks = {
     leftChopstick ! Take
