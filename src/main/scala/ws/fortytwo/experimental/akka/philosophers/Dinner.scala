@@ -17,7 +17,7 @@ object Dinner {
 
     philosophers foreach { _ ! Think }
 
-    system.scheduler.scheduleOnce(10.seconds)(system.shutdown())
+    system.scheduler.scheduleOnce(15.seconds)(system.shutdown())
   }
 
 }

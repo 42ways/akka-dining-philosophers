@@ -5,7 +5,6 @@ import scala.concurrent.duration.FiniteDuration
 import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.ActorRef
-import akka.actor.actorRef2Scala
 
 object Philosopher {
   // Messages for Philosopher
@@ -42,6 +41,7 @@ class Philosopher(private val leftChopstick: ActorRef, private val rightChopstic
 
   private def handleMissingChopstick(chopstick: ActorRef) = {
     log debug ("Philosopher %s got a ChopstickInUse from %s".format(name, chopstick.path.name))
+    // we always put down both chopsticks for simplicity (but this leads to some unhandled messages)
     putChopsticks
     thinkFor(retryTime)
   }
@@ -79,9 +79,18 @@ class Philosopher(private val leftChopstick: ActorRef, private val rightChopstic
       thinkFor(thinkingTime)
   }
 
+  override def unhandled(msg: Any): Unit = {
+    msg match {
+      case m =>
+        // we get quite a bit unhandled "ChopstickTaken" and "ChopstickInUse" messages. Change debug to info to see them
+        log debug ("Philosopher %s currently doesn't handle %s from %s".format(self.path.name, m, sender.path.name))
+        super.unhandled(m)
+    }
+  }
+
   def receive: Receive = {
     case Think =>
-      log info ("Philosopher %s starts to think".format(name))
+      log info ("Philosopher %s initially STARTS TO THINK".format(name))
       thinkFor(thinkingTime)
   }
 
