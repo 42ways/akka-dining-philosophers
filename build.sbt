@@ -4,7 +4,7 @@ organization := "42ways"
 
 version := "0.1-SNAPSHOT"
 
-scalaVersion := "2.11.4"
+scalaVersion := "2.11.7"
 
 scalacOptions ++= Seq("-feature", "-deprecation")
 
